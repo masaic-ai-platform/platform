@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "platform.fullname" . }}
+  labels:
+    {{- include "platform.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.openResponses.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "platform.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.openResponses.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "platform.labels" . | nindent 8 }}
+        app: {{ include "platform.fullname" . }}        # Adding app label for istio
+        version: {{ .Chart.AppVersion | quote }}  # Adding version label for istio
+        {{- with .Values.openResponses.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.openResponses.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "platform.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.openResponses.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.openResponses.securityContext | nindent 12 }}
+          image: "{{ .Values.openResponses.image.repository }}:{{ .Values.openResponses.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.openResponses.image.pullPolicy }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "platform"
+            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_HOST
+              value: {{ .Values.openResponses.qdrant.host | quote }}
+            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_PORT
+              value: {{ .Values.openResponses.qdrant.port | quote }}
+            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_USE_TLS
+              value: {{ .Values.openResponses.qdrant.useTLS | quote }}
+            - name: OPEN_RESPONSES_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.openResponses.mongoDb.uriSecret | quote }}
+                  key: connectionString.standard
+            - name: OTEL_SDK_DISABLED
+              value: {{ .Values.openResponses.otel.enabled | quote }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ .Values.openResponses.otel.endpoint | quote }}
+            - name: OTEL_EXPORTER_OTLP_HEADERS
+              value: {{ .Values.openResponses.otel.headers | quote }}
+            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: qdrant
+                  key: apiKey
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openresponses
+                  key: openAiApiKey
+          ports:
+            - name: http
+              containerPort: 6644
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 6644
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.openResponses.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.openResponses.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.openResponses.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.openResponses.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.openResponses.startupProbe.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 6644
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.openResponses.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.openResponses.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.openResponses.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.openResponses.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.openResponses.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 6644
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.openResponses.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.openResponses.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.openResponses.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.openResponses.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.openResponses.readinessProbe.failureThreshold }}
+          resources:
+            {{- toYaml .Values.openResponses.resources | nindent 12 }}
+          {{- with .Values.openResponses.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.openResponses.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.openResponses.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.openResponses.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.openResponses.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

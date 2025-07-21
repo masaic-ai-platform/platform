@@ -1,0 +1,28 @@
+apiVersion: v2
+appVersion: 0.4.1
+dependencies:
+  - condition: community-operator.enabled
+    name: community-operator
+    repository: https://mongodb.github.io/helm-charts
+    version: 0.13.0
+  - condition: qdrant.enabled
+    name: qdrant
+    repository: https://qdrant.to/helm
+    version: 1.14.1
+  - condition: signoz.enabled
+    name: signoz
+    repository: https://charts.signoz.io
+    version: 0.86.0
+description: A Helm chart for OpenResponses - The Drop-in Agentic API Layer
+home: https://github.com/masaic-ai-platform/open-responses
+keywords:
+- openresponses
+- masaic
+kubeVersion: '>=1.25.0-0'
+maintainers:
+- name: open-responses
+  url: https://github.com/masaic-ai-platform/open-responses
+name: open-responses
+sources:
+- https://github.com/masaic-ai-platform/open-responses
+version: 8.0.1

@@ -1,0 +1,12 @@
+dependencies:
+- name: community-operator
+  repository: https://mongodb.github.io/helm-charts
+  version: 0.13.0
+- name: qdrant
+  repository: https://qdrant.to/helm
+  version: 1.14.1
+- name: signoz
+  repository: https://charts.signoz.io
+  version: 0.86.0
+digest: sha256:5ce5449f498c40b37dc6b8ad610dba6fad6739197c581891327fa82edc5a0828
+generated: "2025-07-15T15:15:45.35163+02:00"

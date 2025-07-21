@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "platformui.fullname" . }}
+  labels:
+    {{- include "platformui.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.platformui.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "platformui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.platformui.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "platformui.labels" . | nindent 8 }}
+        app: {{ include "platformui.fullname" . }}        # Adding app label for istio
+        version: {{ .Chart.AppVersion | quote }}  # Adding version label for istio
+        {{- with .Values.platformui.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.platformui.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "platformui.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.platformui.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.platformui.securityContext | nindent 12 }}
+          image: "{{ .Values.platformui.image.repository }}:{{ .Values.platformui.image.tag }}"
+          imagePullPolicy: {{ .Values.platformui.image.pullPolicy }}
+          env:
+            - name: VITE_DASHBOARD_API_URL
+              #value: "http://{{ include "platform.fullname" . }}:{{ .Values.openResponses.service.port }}"
+              value: {{ .Values.platformui.openResponses.url | quote }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.platformui.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.platformui.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.platformui.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.platformui.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.platformui.startupProbe.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.platformui.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.platformui.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.platformui.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.platformui.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.platformui.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: {{ .Values.platformui.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.platformui.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.platformui.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.platformui.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.platformui.readinessProbe.failureThreshold }}
+          resources:
+            {{- toYaml .Values.platformui.resources | nindent 12 }}
+          {{- with .Values.platformui.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.platformui.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.platformui.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.platformui.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.platformui.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
