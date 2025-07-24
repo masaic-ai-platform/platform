@@ -30,6 +30,7 @@ openResponses:
   image:
     repository: masaicai/open-responses
     pullPolicy: IfNotPresent
+    tag: 0.4.4
 
   serviceAccount:
     create: false
@@ -38,17 +39,21 @@ openResponses:
     name: ""
 
   ingress:
-    enabled: false
-    className: ""
-    annotations: {}
+    enabled: true
     hosts:
-      - host: platform.example.com
+      - host: masaic-cloud-api.masaic.xyz  # Replace masaic.xyz with your domain as needed
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
+  resources:
+    requests:
+      cpu: 2
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 1Gi
 
   podAnnotations: {}
 
@@ -91,7 +96,7 @@ openResponses:
 
   service:
     type: ClusterIP
-    port: 80
+    port: 6644
 
 platformui:
   openResponses:
@@ -100,9 +105,9 @@ platformui:
     #url: "https://open-responses.example.com"
 
   image:
-    repository: jasbir34/playground
+    repository: masaicai/platform-ui
     pullPolicy: IfNotPresent
-    tag: test-0.0.5
+    tag: 0.0.3
 
   serviceAccount:
     create: false
@@ -111,17 +116,21 @@ platformui:
     name: ""
 
   ingress:
-    enabled: false
-    className: ""
-    annotations: {}
+    enabled: true
     hosts:
-      - host: platform-ui.example.com
+      - host: masaic-cloud.masaic.xyz  # Replace masaic.xyz with your domain as needed
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
+  resources:
+    requests:
+      cpu: 1
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
 
   podAnnotations: {}
 
@@ -164,7 +173,7 @@ platformui:
 
   service:
     type: ClusterIP
-    port: 80
+    port: 6645
 
 community-operator:
   enabled: true
@@ -296,6 +305,9 @@ community-operator:
             db: admin
         scramCredentialsSecretName: mongodb-scram
 
+    persistence:
+      size: 5Gi
+
 qdrant:
   enabled: true
   replicaCount: 1
@@ -390,13 +402,13 @@ qdrant:
   podAnnotations: {}
   podLabels: {}
 
-  resources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 100m
-  #   memory: 128Mi
+  resources:
+    requests:
+      cpu: 2
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 1Gi
 
   containerSecurityContext:
     runAsNonRoot: true
@@ -448,13 +460,13 @@ qdrant:
     #           operator: In
     #           values:
     #             - '{{ .Release.Name }}'
-  #     topologyKey: "kubernetes.io/hostname"
+    #     topologyKey: "kubernetes.io/hostname"
 
   topologySpreadConstraints: []
 
   persistence:
     accessModes: ["ReadWriteOnce"]
-    size: 10Gi
+    size: 5Gi
     annotations: {}
     # storageVolumeName: qdrant-storage
     # storageSubPath: ""
@@ -1997,3 +2009,5 @@ signoz:
             exporters: [clickhouselogsexporter, metadataexporter]
   signoz-otel-gateway:
     enabled: false
+
+fullnameOverride: masaic-platform
