@@ -1,15 +1,19 @@
 #nameOverride: ""
 #fullnameOverride: ""
 
+fullnameOverride: masaic-platform
+
 openResponses:
+  replicaCount: 1
+  
   secrets:
     create: true
     openAiApiKey: "your-openai-key"
 
   qdrant:
-    host: "test-qdrant"
+    host: ""
     port: 6334
-    apikey: "qdrant_apikey123"
+    apikey: ""
     useTLS: false
     secrets:
       create: true
@@ -39,7 +43,7 @@ openResponses:
     name: ""
 
   ingress:
-    enabled: true
+    enabled: false
     hosts:
       - host: masaic-cloud-api.masaic.xyz  # Replace masaic.xyz with your domain as needed
         paths:
@@ -47,13 +51,14 @@ openResponses:
             pathType: ImplementationSpecific
     tls: []
 
-  resources:
-    requests:
-      cpu: 2
-      memory: 1Gi
-    limits:
-      cpu: 2
-      memory: 1Gi
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 2
+#      memory: 1Gi
+#    limits:
+#      cpu: 2
+#      memory: 1Gi
 
   podAnnotations: {}
 
@@ -99,6 +104,10 @@ openResponses:
     port: 6644
 
 platformui:
+  fullnameOverride: masaic-platform-ui
+  
+  replicaCount: 1
+
   openResponses:
     # URL for the Open Responses service:
     url: "http://localhost:6644"
@@ -116,7 +125,7 @@ platformui:
     name: ""
 
   ingress:
-    enabled: true
+    enabled: false
     hosts:
       - host: masaic-cloud.masaic.xyz  # Replace masaic.xyz with your domain as needed
         paths:
@@ -124,13 +133,14 @@ platformui:
             pathType: ImplementationSpecific
     tls: []
 
-  resources:
-    requests:
-      cpu: 1
-      memory: 512Mi
-    limits:
-      cpu: 1
-      memory: 512Mi
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 1
+#      memory: 512Mi
+#    limits:
+#      cpu: 1
+#      memory: 512Mi
 
   podAnnotations: {}
 
@@ -305,8 +315,8 @@ community-operator:
             db: admin
         scramCredentialsSecretName: mongodb-scram
 
-    persistence:
-      size: 5Gi
+#    persistence:
+#      size: 5Gi
 
 qdrant:
   enabled: true
@@ -402,13 +412,14 @@ qdrant:
   podAnnotations: {}
   podLabels: {}
 
-  resources:
-    requests:
-      cpu: 2
-      memory: 1Gi
-    limits:
-      cpu: 2
-      memory: 1Gi
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 2
+#      memory: 1Gi
+#    limits:
+#      cpu: 2
+#      memory: 1Gi
 
   containerSecurityContext:
     runAsNonRoot: true
@@ -2009,5 +2020,3 @@ signoz:
             exporters: [clickhouselogsexporter, metadataexporter]
   signoz-otel-gateway:
     enabled: false
-
-fullnameOverride: masaic-platform

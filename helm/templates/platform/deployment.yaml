@@ -39,28 +39,38 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "platform"
+            - name: OPEN_RESPONSES_STORE_VECTOR_REPOSITORY_TYPE
+              value: "mongodb"
+            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_PROVIDER
+              value: "qdrant"
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_HOST
-              value: {{ .Values.openResponses.qdrant.host | quote }}
+              value: {{ .Values.openResponses.qdrant.host | default (include "qdrant.fullname" .) | quote }}
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_PORT
               value: {{ .Values.openResponses.qdrant.port | quote }}
+            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: qdrant
+                  key: apiKey
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_USE_TLS
               value: {{ .Values.openResponses.qdrant.useTLS | quote }}
+            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_COLLECTION_NAME
+              value: "open_responses"
+            - name: OPEN_RESPONSES_STORE_TYPE
+              value: "mongodb"
             - name: OPEN_RESPONSES_MONGODB_URI
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.openResponses.mongoDb.uriSecret | quote }}
                   key: connectionString.standard
+            - name: OPEN_RESPONSES_MONGODB_DATABASE
+              value: "open_responses"
             - name: OTEL_SDK_DISABLED
               value: {{ .Values.openResponses.otel.enabled | quote }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.openResponses.otel.endpoint | quote }}
             - name: OTEL_EXPORTER_OTLP_HEADERS
               value: {{ .Values.openResponses.otel.headers | quote }}
-            - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: qdrant
-                  key: apiKey
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:

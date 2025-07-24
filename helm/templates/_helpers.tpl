@@ -74,8 +74,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "platformui.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- if .Values.platformui.fullnameOverride }}
+{{- .Values.platformui.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride }}
 {{- if contains $name .Release.Name }}
@@ -121,5 +121,24 @@ Create the name of the service account to use
 {{- default (include "platformui.fullname" .) .Values.platformui.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.platformui.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Qdrant service fullname helper
+*/}}
+{{- define "qdrant.fullname" -}}
+{{- if .Values.qdrant }}
+  {{- if .Values.qdrant.fullnameOverride }}
+    {{- .Values.qdrant.fullnameOverride | trunc 63 | trimSuffix "-" }}
+  {{- else }}
+    {{- printf "%s-%s" .Release.Name "qdrant" | trunc 63 | trimSuffix "-" }}
+  {{- end }}
+{{- else }}
+  {{- if .Values.fullnameOverride }}
+    {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+  {{- else }}
+    {{- printf "%s-%s" .Release.Name "qdrant" | trunc 63 | trimSuffix "-" }}
+  {{- end }}
 {{- end }}
 {{- end }}
