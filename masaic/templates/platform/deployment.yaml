@@ -59,18 +59,17 @@ spec:
             - name: OPEN_RESPONSES_STORE_TYPE
               value: "mongodb"
             - name: OPEN_RESPONSES_MONGODB_URI
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.openResponses.mongoDb.uriSecret | quote }}
-                  key: connectionString.standard
+              value: {{ .Values.openResponses.mongoDb.uri | quote }}
             - name: OPEN_RESPONSES_MONGODB_DATABASE
               value: "open_responses"
             - name: OTEL_SDK_DISABLED
               value: {{ .Values.openResponses.otel.enabled | quote }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.openResponses.otel.endpoint | quote }}
-            - name: OTEL_EXPORTER_OTLP_HEADERS
-              value: {{ .Values.openResponses.otel.headers | quote }}
+            {{- range $key, $val := .Values.openResponses.otel.otelHeaders }}
+            - name: OTEL_EXPORTER_OTLP_HEADERS_{{ $key | replace "-" "_" | upper }}
+              value: "{{ $val }}"
+            {{- end }}
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:

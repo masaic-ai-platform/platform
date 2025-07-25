@@ -2,8 +2,14 @@
 
 set -e
 
-NAMESPACE="masaic-cloud"
-RELEASE="masaic"
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <namespace> <release>" >&2
+  echo "Error: Both <namespace> and <release> arguments are required." >&2
+  exit 1
+fi
+
+NAMESPACE="$1"
+RELEASE="$2"
 
 echo "=== CLEANUP SCRIPT FOR MASAIC-CLOUD ==="
 
@@ -34,4 +40,7 @@ kubectl get all -n $NAMESPACE || echo "No resources found in namespace $NAMESPAC
 echo ""
 echo "=== CLEANUP COMPLETE ==="
 echo "You can now run your Helm install command:"
-echo "helm upgrade --install --namespace $NAMESPACE $RELEASE ./helm --create-namespace"
+echo "1. Deploy infra (optional)"
+echo "helm upgrade --install -n $NAMESPACE {release_name} ./infra --create-namespace"
+echo "2. Deploy masaic-platform"
+echo "helm upgrade --install --n $NAMESPACE {release_name} ./helm --create-namespace"

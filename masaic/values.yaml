@@ -1,0 +1,183 @@
+#nameOverride: ""
+#fullnameOverride: ""
+
+fullnameOverride: masaic-platform
+
+openResponses:
+  replicaCount: 1
+  springProfile: "platform"
+  vectorRepositoryType: "mongodb"
+  vectorSearchProvider: "qdrant"
+  vectorSearchCollectionName: "open_responses"
+  storeType: "mongodb"
+  mongoDbDatabase: "open_responses"
+  qdrant:
+    host: ""
+    port: 6334
+    apikey: ""
+    useTLS: true
+    secrets:
+      create: true
+  mongoDb:
+    uri: ""
+  otel:
+    sdkDisabled: false
+    endpoint: "ingest.in.signoz.cloud"
+    headers:
+      signoz-ingestion-key:
+  secrets:
+    create: true
+    openAiApiKey: "your-openai-key"
+  image:
+    repository: masaicai/open-responses
+    pullPolicy: IfNotPresent
+    tag: 0.4.5
+
+  serviceAccount:
+    create: false
+    automount: true
+    annotations: {}
+    name: ""
+
+  ingress:
+    enabled: false
+    hosts:
+      - host: masaic-cloud-api.masaic.xyz  # Replace masaic.xyz with your domain as needed
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 2
+#      memory: 1Gi
+#    limits:
+#      cpu: 2
+#      memory: 1Gi
+
+  podAnnotations: {}
+
+  podLabels: {}
+
+  podSecurityContext: {}
+
+  securityContext: {}
+
+  volumes: []
+
+  volumeMounts: []
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  livenessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+  startupProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 1
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 180
+
+  service:
+    type: ClusterIP
+    port: 6644
+
+platformui:
+  fullnameOverride: masaic-platform-ui
+  
+  replicaCount: 1
+
+  openResponses:
+    # URL for the Open Responses service:
+    url: "http://localhost:6644"
+    #url: "https://open-responses.example.com"
+
+  image:
+    repository: masaicai/platform-ui
+    pullPolicy: IfNotPresent
+    tag: 0.0.3
+
+  serviceAccount:
+    create: false
+    automount: true
+    annotations: {}
+    name: ""
+
+  ingress:
+    enabled: false
+    hosts:
+      - host: masaic-cloud.masaic.xyz  # Replace masaic.xyz with your domain as needed
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 1
+#      memory: 512Mi
+#    limits:
+#      cpu: 1
+#      memory: 512Mi
+
+  podAnnotations: {}
+
+  podLabels: {}
+
+  podSecurityContext: {}
+
+  securityContext: {}
+
+  volumes: []
+
+  volumeMounts: []
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  livenessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+  startupProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 1
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 180
+
+  service:
+    type: ClusterIP
+    port: 6645

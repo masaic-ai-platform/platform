@@ -1,19 +1,15 @@
 #nameOverride: ""
 #fullnameOverride: ""
 
-fullnameOverride: masaic-platform
-
 openResponses:
-  replicaCount: 1
-  
   secrets:
     create: true
     openAiApiKey: "your-openai-key"
 
   qdrant:
-    host: ""
+    host: "test-qdrant"
     port: 6334
-    apikey: ""
+    apikey: "qdrant_apikey123"
     useTLS: false
     secrets:
       create: true
@@ -34,7 +30,6 @@ openResponses:
   image:
     repository: masaicai/open-responses
     pullPolicy: IfNotPresent
-    tag: 0.4.4
 
   serviceAccount:
     create: false
@@ -44,21 +39,16 @@ openResponses:
 
   ingress:
     enabled: false
+    className: ""
+    annotations: {}
     hosts:
-      - host: masaic-cloud-api.masaic.xyz  # Replace masaic.xyz with your domain as needed
+      - host: platform.example.com
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls: []
 
   resources: {}
-#  resources:
-#    requests:
-#      cpu: 2
-#      memory: 1Gi
-#    limits:
-#      cpu: 2
-#      memory: 1Gi
 
   podAnnotations: {}
 
@@ -101,22 +91,18 @@ openResponses:
 
   service:
     type: ClusterIP
-    port: 6644
+    port: 80
 
 platformui:
-  fullnameOverride: masaic-platform-ui
-  
-  replicaCount: 1
-
   openResponses:
     # URL for the Open Responses service:
     url: "http://localhost:6644"
     #url: "https://open-responses.example.com"
 
   image:
-    repository: masaicai/platform-ui
+    repository: jasbir34/playground
     pullPolicy: IfNotPresent
-    tag: 0.0.3
+    tag: test-0.0.5
 
   serviceAccount:
     create: false
@@ -126,21 +112,16 @@ platformui:
 
   ingress:
     enabled: false
+    className: ""
+    annotations: {}
     hosts:
-      - host: masaic-cloud.masaic.xyz  # Replace masaic.xyz with your domain as needed
+      - host: platform-ui.example.com
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls: []
 
   resources: {}
-#  resources:
-#    requests:
-#      cpu: 1
-#      memory: 512Mi
-#    limits:
-#      cpu: 1
-#      memory: 512Mi
 
   podAnnotations: {}
 
@@ -183,7 +164,7 @@ platformui:
 
   service:
     type: ClusterIP
-    port: 6645
+    port: 80
 
 community-operator:
   enabled: true
@@ -315,9 +296,6 @@ community-operator:
             db: admin
         scramCredentialsSecretName: mongodb-scram
 
-#    persistence:
-#      size: 5Gi
-
 qdrant:
   enabled: true
   replicaCount: 1
@@ -413,13 +391,12 @@ qdrant:
   podLabels: {}
 
   resources: {}
-#  resources:
-#    requests:
-#      cpu: 2
-#      memory: 1Gi
-#    limits:
-#      cpu: 2
-#      memory: 1Gi
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+  #   memory: 128Mi
 
   containerSecurityContext:
     runAsNonRoot: true
@@ -471,13 +448,13 @@ qdrant:
     #           operator: In
     #           values:
     #             - '{{ .Release.Name }}'
-    #     topologyKey: "kubernetes.io/hostname"
+  #     topologyKey: "kubernetes.io/hostname"
 
   topologySpreadConstraints: []
 
   persistence:
     accessModes: ["ReadWriteOnce"]
-    size: 5Gi
+    size: 10Gi
     annotations: {}
     # storageVolumeName: qdrant-storage
     # storageSubPath: ""
