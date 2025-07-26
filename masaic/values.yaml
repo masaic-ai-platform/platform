@@ -26,7 +26,7 @@ openResponses:
       #api-key: "my_api_key"
   platform:
     model:
-      apikey: ""
+      apikey: "" #optional, set if want to use a fixed model for platform operations like embeddings generation, prompt generation, mock tools generation, etc
       name: "gpt-4.1-mini"
   secrets:
     create: true
