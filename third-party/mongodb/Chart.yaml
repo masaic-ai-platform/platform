@@ -1,0 +1,11 @@
+apiVersion: v2
+name: mongodb-third-party
+description: MongoDB deployment using community operator
+type: application
+version: 1.0.0
+appVersion: "6.0.5"
+
+dependencies:
+  - name: community-operator
+    version: 0.13.0
+    repository: https://mongodb.github.io/helm-charts 

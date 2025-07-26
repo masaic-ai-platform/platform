@@ -1,0 +1,188 @@
+fullnameOverride: masaic-platform
+
+openResponses:
+  replicaCount: 1
+  springProfile: "platform" #always set to: "platform"
+  vectorRepositoryType: "file" #possible values are: "file" or "mongodb". Set to "mongodb" if mongodb installation is available.
+  vectorSearchProvider: "file" #possible values are: "file" or "qdrant". Set to qdrant id qdrant installation is available.
+  vectorSearchCollectionName: "openresponses"
+  storeType: "in-memory" #possible values are: "in-memory" or "mongodb". Set to "mongodb" if mongodb installation is available.
+  mongoDbDatabase: "openresponses"
+  qdrant:
+    host: ""
+    port: 6334
+    apikey: ""
+    useTLS: false #possible values are true or false. Set to true if qdrant server is ssl protected
+    secrets:
+      create: true
+  mongoDb:
+    #if DB is password protected then uri can be mongodb://mongodb-user:$(MONGODB_PASSWORD)@mongodb-svc:27017/,
+    #where MONGODB_PASSWORD is supplied through secret
+    uri: ""
+    secrets:
+      create: true
+      adminPassword: ""
+  otel:
+    sdkDisabled: false #possible values are true or false. Set to false if otel collector service is available.
+    endpoint: ""
+    headersMap:
+      #define otel collector api key in key value fashion.
+      #If key=api-key and value=my_api_key then provide the same as below example:
+      #api-key: "my_api_key"
+  platform:
+    model:
+      apikey: "" #optional, set if want to use a fixed model for platform operations like embeddings generation, prompt generation, mock tools generation, etc
+      name: "gpt-4.1-mini"
+  secrets:
+    create: true
+  image:
+    repository: masaicai/open-responses
+    pullPolicy: IfNotPresent
+    tag: 0.4.5
+
+  serviceAccount:
+    create: false
+    automount: true
+    annotations: {}
+    name: ""
+
+  ingress:
+    enabled: false
+    hosts:
+      - host: masaic-cloud-api.masaic.xyz  # Replace masaic.xyz with your domain as needed
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 2
+#      memory: 1Gi
+#    limits:
+#      cpu: 2
+#      memory: 1Gi
+
+  podAnnotations: {}
+
+  podLabels: {}
+
+  podSecurityContext: {}
+
+  securityContext: {}
+
+  volumes: []
+
+  volumeMounts: []
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  livenessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+  startupProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 1
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 180
+
+  service:
+    type: ClusterIP
+    port: 6644
+
+platformui:
+  fullnameOverride: masaic-platform-ui
+  
+  replicaCount: 1
+
+  openResponses:
+    url: "http://localhost:6644" #set this to host URL of ingress created for masaic-platform service
+
+  image:
+    repository: masaicai/platform-ui
+    pullPolicy: IfNotPresent
+    tag: 0.0.3
+
+  serviceAccount:
+    create: false
+    automount: true
+    annotations: {}
+    name: ""
+
+  ingress:
+    enabled: false
+    hosts:
+      - host: masaic-cloud.masaic.xyz  # Replace masaic.xyz with your domain as needed
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 1
+#      memory: 512Mi
+#    limits:
+#      cpu: 1
+#      memory: 512Mi
+
+  podAnnotations: {}
+
+  podLabels: {}
+
+  podSecurityContext: {}
+
+  securityContext: {}
+
+  volumes: []
+
+  volumeMounts: []
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+  livenessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+
+  readinessProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 15
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+
+  startupProbe:
+    initialDelaySeconds: 1
+    periodSeconds: 1
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 180
+
+  service:
+    type: ClusterIP
+    port: 6645

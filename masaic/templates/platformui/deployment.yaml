@@ -42,7 +42,7 @@ spec:
               value: {{ .Values.platformui.openResponses.url | quote }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 6645
               protocol: TCP
           startupProbe:
             httpGet:
