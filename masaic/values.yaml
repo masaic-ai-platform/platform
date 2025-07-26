@@ -16,10 +16,13 @@ openResponses:
     secrets:
       create: true
   mongoDb:
-    uri: ""
+    uri: "mongodb://mongodb-user:mongodb-admin-password-123@mongodb:27017/"
+    secrets:
+      create: true
+      adminPassword: "mongodb-admin-password-123"
   otel:
     sdkDisabled: false #possible values are true or false. Set to false if otel collector service is available.
-    endpoint: ""
+    endpoint: "http://  infra-signoz-otel-collector:4318"
     headersMap:
       #define otel collector api key in key value fashion.
       #If key=api-key and value=my_api_key then provide the same as below example:

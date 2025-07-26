@@ -40,7 +40,4 @@ kubectl get all -n $NAMESPACE || echo "No resources found in namespace $NAMESPAC
 echo ""
 echo "=== CLEANUP COMPLETE ==="
 echo "You can now run your Helm install command:"
-echo "1. Deploy infra (optional)"
-echo "helm upgrade --install -n $NAMESPACE {release_name} ./infra --create-namespace"
-echo "2. Deploy masaic-platform"
 echo "helm upgrade --install --n $NAMESPACE {release_name} ./helm --create-namespace"
