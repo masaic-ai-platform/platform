@@ -58,6 +58,13 @@ spec:
               value: {{ .Values.openResponses.vectorSearchCollectionName | quote }}
             - name: OPEN_RESPONSES_STORE_TYPE
               value: {{ .Values.openResponses.storeType | quote }}
+            {{- if .Values.openResponses.mongoDb.secrets.create }}
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-password
+                  key: password
+            {{- end }}
             - name: OPEN_RESPONSES_MONGODB_URI
               value: {{ .Values.openResponses.mongoDb.uri | quote }}
             - name: OPEN_RESPONSES_MONGODB_DATABASE

@@ -33,11 +33,15 @@ helm upgrade --install -n masaic-cloud my-release ./masaic --create-namespace
 - Use built-in secret management for API keys by setting:
   - `openResponses.qdrant.apikey`
   - `openResponses.platform.model.apikey`
+  - `openResponses.mongoDb.secrets.adminPassword`
 ```bash
 helm upgrade --install -n masaic-cloud my-release ./masaic --create-namespace \
   --set openResponses.qdrant.apikey="your_qdrant_api_key" \
-  --set openResponses.platform.model.apikey="your_model_api_key"
+  --set openResponses.platform.model.apikey="your_model_api_key" \
+  --set openResponses.mongoDb.secrets.adminPassword="mongo_pwd"
 ```
+
+**Note**: For third-party dependencies (MongoDB, SigNoz, Qdrant), see [third-party installation guide](./third-party/mongodb/README.md).
 
 ## Configuration
 

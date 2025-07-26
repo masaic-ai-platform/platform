@@ -12,17 +12,19 @@ openResponses:
     host: ""
     port: 6334
     apikey: ""
-    useTLS: true #possible values are true or false. Set to true if qdrant server is ssl protected
+    useTLS: false #possible values are true or false. Set to true if qdrant server is ssl protected
     secrets:
       create: true
   mongoDb:
-    uri: "mongodb://mongodb-user:mongodb-admin-password-123@mongodb:27017/"
+    #if DB is password protected then uri can be mongodb://mongodb-user:$(MONGODB_PASSWORD)@mongodb-svc:27017/,
+    #where MONGODB_PASSWORD is supplied through secret
+    uri: ""
     secrets:
       create: true
-      adminPassword: "mongodb-admin-password-123"
+      adminPassword: ""
   otel:
     sdkDisabled: false #possible values are true or false. Set to false if otel collector service is available.
-    endpoint: "http://  infra-signoz-otel-collector:4318"
+    endpoint: ""
     headersMap:
       #define otel collector api key in key value fashion.
       #If key=api-key and value=my_api_key then provide the same as below example:
