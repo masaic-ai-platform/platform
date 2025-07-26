@@ -38,13 +38,13 @@ spec:
           imagePullPolicy: {{ .Values.openResponses.image.pullPolicy }}
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "platform"
+              value: {{ .Values.openResponses.springProfile | quote }}
             - name: OPEN_RESPONSES_STORE_VECTOR_REPOSITORY_TYPE
-              value: "mongodb"
+              value: {{ .Values.openResponses.vectorRepositoryType | quote }}
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_PROVIDER
-              value: "qdrant"
+              value: {{ .Values.openResponses.vectorSearchProvider | quote }}
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_HOST
-              value: {{ .Values.openResponses.qdrant.host | default (include "qdrant.fullname" .) | quote }}
+              value: {{ .Values.openResponses.qdrant.host | quote }}
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_PORT
               value: {{ .Values.openResponses.qdrant.port | quote }}
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_API_KEY
@@ -55,20 +55,21 @@ spec:
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_QDRANT_USE_TLS
               value: {{ .Values.openResponses.qdrant.useTLS | quote }}
             - name: OPEN_RESPONSES_STORE_VECTOR_SEARCH_COLLECTION_NAME
-              value: "open_responses"
+              value: {{ .Values.openResponses.vectorSearchCollectionName | quote }}
             - name: OPEN_RESPONSES_STORE_TYPE
-              value: "mongodb"
+              value: {{ .Values.openResponses.storeType | quote }}
             - name: OPEN_RESPONSES_MONGODB_URI
               value: {{ .Values.openResponses.mongoDb.uri | quote }}
             - name: OPEN_RESPONSES_MONGODB_DATABASE
-              value: "open_responses"
+              value: {{ .Values.openResponses.mongoDbDatabase | quote }}
             - name: OTEL_SDK_DISABLED
-              value: {{ .Values.openResponses.otel.enabled | quote }}
+              value: {{ .Values.openResponses.otel.sdkDisabled | quote }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: {{ .Values.openResponses.otel.endpoint | quote }}
-            {{- range $key, $val := .Values.openResponses.otel.otelHeaders }}
-            - name: OTEL_EXPORTER_OTLP_HEADERS_{{ $key | replace "-" "_" | upper }}
-              value: "{{ $val }}"
+            {{- with .Values.openResponses.otel.headersMap }}
+            - name: SPRING_APPLICATION_JSON
+              value: |-
+                {"otel.exporter.otlp.headers": {{ toJson . }}}
             {{- end }}
             - name: OPENAI_API_KEY
               valueFrom:

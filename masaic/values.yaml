@@ -1,30 +1,29 @@
-#nameOverride: ""
-#fullnameOverride: ""
-
 fullnameOverride: masaic-platform
 
 openResponses:
   replicaCount: 1
-  springProfile: "platform"
-  vectorRepositoryType: "mongodb"
-  vectorSearchProvider: "qdrant"
-  vectorSearchCollectionName: "open_responses"
-  storeType: "mongodb"
-  mongoDbDatabase: "open_responses"
+  springProfile: "platform" #always set to: "platform"
+  vectorRepositoryType: "file" #possible values are: "file" or "mongodb". Set to "mongodb" if mongodb installation is available.
+  vectorSearchProvider: "file" #possible values are: "file" or "qdrant". Set to qdrant id qdrant installation is available.
+  vectorSearchCollectionName: "openresponses"
+  storeType: "in-memory" #possible values are: "in-memory" or "mongodb". Set to "mongodb" if mongodb installation is available.
+  mongoDbDatabase: "openresponses"
   qdrant:
     host: ""
     port: 6334
     apikey: ""
-    useTLS: true
+    useTLS: false #possible values are true or false. Set to true if qdrant server is ssl protected
     secrets:
       create: true
   mongoDb:
     uri: ""
   otel:
-    sdkDisabled: false
-    endpoint: "ingest.in.signoz.cloud"
-    headers:
-      signoz-ingestion-key:
+    sdkDisabled: true #possible values are true or false. Set to true if otel collector service is available.
+    endpoint: ""
+    headersMap:
+      #define otel collector api key in key value fashion.
+      #If key=api-key and value=my_api_key then provide the same as below example:
+      #api-key: "my_api_key"
   secrets:
     create: true
     openAiApiKey: "your-openai-key"
@@ -48,14 +47,13 @@ openResponses:
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
-#  resources:
-#    requests:
-#      cpu: 2
-#      memory: 1Gi
-#    limits:
-#      cpu: 2
-#      memory: 1Gi
+  resources:
+    requests:
+      cpu: 2
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 1Gi
 
   podAnnotations: {}
 
@@ -106,9 +104,7 @@ platformui:
   replicaCount: 1
 
   openResponses:
-    # URL for the Open Responses service:
-    url: "http://localhost:6644"
-    #url: "https://open-responses.example.com"
+    url: "http://localhost:6644" #set this to host URL of ingress created for masaic-platform service
 
   image:
     repository: masaicai/platform-ui
@@ -130,14 +126,13 @@ platformui:
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
-#  resources:
-#    requests:
-#      cpu: 1
-#      memory: 512Mi
-#    limits:
-#      cpu: 1
-#      memory: 512Mi
+  resources:
+    requests:
+      cpu: 1
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
 
   podAnnotations: {}
 

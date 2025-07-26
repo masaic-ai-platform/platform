@@ -47,7 +47,7 @@ spec:
           startupProbe:
             httpGet:
               path: /health
-              port: 6645
+              port: 80
               scheme: HTTP
             initialDelaySeconds: {{ .Values.platformui.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.platformui.startupProbe.periodSeconds }}
@@ -57,7 +57,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /health
-              port: 6645
+              port: 80
               scheme: HTTP
             initialDelaySeconds: {{ .Values.platformui.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.platformui.livenessProbe.periodSeconds }}
@@ -67,7 +67,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /health
-              port: 6645
+              port: 80
               scheme: HTTP
             initialDelaySeconds: {{ .Values.platformui.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.platformui.readinessProbe.periodSeconds }}
