@@ -71,11 +71,20 @@ spec:
               value: |-
                 {"otel.exporter.otlp.headers": {{ toJson . }}}
             {{- end }}
-            - name: OPENAI_API_KEY
+            - name: PLATFORM_DEPLOYMENT_MODEL
+              value: {{ .Values.openResponses.platform.model.name | quote }}
+            {{- if .Values.openResponses.platform.model.apikey }}
+            - name: OPEN_RESPONSES_EMBEDDINGS_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: openresponses
                   key: openAiApiKey
+            - name: PLATFORM_DEPLOYMENT_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: openresponses
+                  key: openAiApiKey
+            {{- end }}
           ports:
             - name: http
               containerPort: 6644

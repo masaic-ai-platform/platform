@@ -12,21 +12,24 @@ openResponses:
     host: ""
     port: 6334
     apikey: ""
-    useTLS: false #possible values are true or false. Set to true if qdrant server is ssl protected
+    useTLS: true #possible values are true or false. Set to true if qdrant server is ssl protected
     secrets:
       create: true
   mongoDb:
     uri: ""
   otel:
-    sdkDisabled: true #possible values are true or false. Set to true if otel collector service is available.
+    sdkDisabled: false #possible values are true or false. Set to false if otel collector service is available.
     endpoint: ""
     headersMap:
       #define otel collector api key in key value fashion.
       #If key=api-key and value=my_api_key then provide the same as below example:
       #api-key: "my_api_key"
+  platform:
+    model:
+      apikey: ""
+      name: "gpt-4.1-mini"
   secrets:
     create: true
-    openAiApiKey: "your-openai-key"
   image:
     repository: masaicai/open-responses
     pullPolicy: IfNotPresent
@@ -47,13 +50,14 @@ openResponses:
             pathType: ImplementationSpecific
     tls: []
 
-  resources:
-    requests:
-      cpu: 2
-      memory: 1Gi
-    limits:
-      cpu: 2
-      memory: 1Gi
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 2
+#      memory: 1Gi
+#    limits:
+#      cpu: 2
+#      memory: 1Gi
 
   podAnnotations: {}
 
@@ -126,13 +130,14 @@ platformui:
             pathType: ImplementationSpecific
     tls: []
 
-  resources:
-    requests:
-      cpu: 1
-      memory: 512Mi
-    limits:
-      cpu: 1
-      memory: 512Mi
+  resources: {}
+#  resources:
+#    requests:
+#      cpu: 1
+#      memory: 512Mi
+#    limits:
+#      cpu: 1
+#      memory: 512Mi
 
   podAnnotations: {}
 
