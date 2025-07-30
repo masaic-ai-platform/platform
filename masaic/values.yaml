@@ -23,7 +23,7 @@ openResponses:
       create: true
       adminPassword: ""
   otel:
-    sdkDisabled: false #possible values are true or false. Set to false if otel collector service is available.
+    sdkDisabled: true #possible values are true or false. Set to false if otel collector service is available.
     endpoint: ""
     headersMap:
       #define otel collector api key in key value fashion.
@@ -38,7 +38,7 @@ openResponses:
   image:
     repository: masaicai/open-responses
     pullPolicy: IfNotPresent
-    tag: 0.4.5
+    tag: 0.4.6
 
   serviceAccount:
     create: false
@@ -55,14 +55,14 @@ openResponses:
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
-#  resources:
-#    requests:
-#      cpu: 2
-#      memory: 1Gi
-#    limits:
-#      cpu: 2
-#      memory: 1Gi
+#  resources: {}
+  resources:
+    requests:
+      cpu: 2
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 1Gi
 
   podAnnotations: {}
 
@@ -118,7 +118,7 @@ platformui:
   image:
     repository: masaicai/platform-ui
     pullPolicy: IfNotPresent
-    tag: 0.0.3
+    tag: 0.0.4
 
   serviceAccount:
     create: false
@@ -135,14 +135,14 @@ platformui:
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
-#  resources:
-#    requests:
-#      cpu: 1
-#      memory: 512Mi
-#    limits:
-#      cpu: 1
-#      memory: 512Mi
+#  resources: {}
+  resources:
+    requests:
+      cpu: 1
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
 
   podAnnotations: {}
 
