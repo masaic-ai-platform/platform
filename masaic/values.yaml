@@ -55,14 +55,14 @@ openResponses:
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
-#  resources:
-#    requests:
-#      cpu: 2
-#      memory: 1Gi
-#    limits:
-#      cpu: 2
-#      memory: 1Gi
+#  resources: {}
+  resources:
+    requests:
+      cpu: 2
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 1Gi
 
   podAnnotations: {}
 
@@ -135,14 +135,14 @@ platformui:
             pathType: ImplementationSpecific
     tls: []
 
-  resources: {}
-#  resources:
-#    requests:
-#      cpu: 1
-#      memory: 512Mi
-#    limits:
-#      cpu: 1
-#      memory: 512Mi
+#  resources: {}
+  resources:
+    requests:
+      cpu: 1
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
 
   podAnnotations: {}
 
