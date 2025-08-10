@@ -1,6 +1,6 @@
 # Masaic Dev Platform - Helm Chart
 
-A Helm chart to deploy [OpenResponses](https://github.com/masaic-ai-platform/open-responses) and [Platform UI](https://github.com/masaic-ai-platform/platform-ui/) for an Agentic Orchestration AI platform.
+A Helm chart to deploy [AgC(Agentic Compute)](https://github.com/masaic-ai-platform/AgC)for an Agentic Orchestration AI platform.
 
 ## Quick Installation
 
