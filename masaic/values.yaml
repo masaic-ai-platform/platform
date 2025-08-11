@@ -38,7 +38,7 @@ openResponses:
   image:
     repository: masaicai/open-responses
     pullPolicy: IfNotPresent
-    tag: 0.4.6
+    tag: 0.5.0
 
   serviceAccount:
     create: false
@@ -118,7 +118,7 @@ platformui:
   image:
     repository: masaicai/platform-ui
     pullPolicy: IfNotPresent
-    tag: 0.0.4
+    tag: 0.5.0
 
   serviceAccount:
     create: false
